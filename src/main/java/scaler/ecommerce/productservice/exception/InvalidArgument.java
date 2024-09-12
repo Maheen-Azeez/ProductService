@@ -1,6 +1,6 @@
 package scaler.ecommerce.productservice.exception;
 
-public class InvalidArgument extends Exception {
+public class InvalidArgument extends RuntimeException {
     public InvalidArgument() {
     }
 

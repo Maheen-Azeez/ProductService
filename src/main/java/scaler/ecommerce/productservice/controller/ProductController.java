@@ -37,7 +37,7 @@ public class ProductController {
         return ResponseEntity.ok(productResponse);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponseDto> getProduct(@PathVariable int id) throws ProductNotFound {
+    public ResponseEntity<ProductResponseDto> getProduct(@PathVariable Long id) throws ProductNotFound {
         Product product = productService.getProduct(id);
         if(product == null) {
             throw new ProductNotFound("No product found with ID: " + id + ". Please check the ID and try again.");
@@ -46,7 +46,8 @@ public class ProductController {
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ProductResponseDto> createProduct(@RequestBody ProductRequestDto productRequestDto) {
+    public ResponseEntity<ProductResponseDto> createProduct(@RequestBody ProductRequestDto productRequestDto) throws InvalidArgument {
+        validateCreateProductRequest(productRequestDto);
         Product product = ProductBuilder.convertToProduct(productRequestDto);
         Product createdProduct = productService.addProduct(product);
         URI location = ServletUriComponentsBuilder
@@ -55,13 +56,33 @@ public class ProductController {
                 .build(createdProduct.getId());
         return ResponseEntity.created(location).body(new ProductResponseDto(createdProduct));
     }
-    @PutMapping("/{id}")
-    public String updateProduct(@PathVariable int id,ProductRequestDto productRequestDto) throws ProductNotFound {
-        return null;
+    @PutMapping()
+    public ResponseEntity<ProductResponseDto> updateProduct(@RequestBody ProductRequestDto productRequestDto) throws ProductNotFound, InvalidArgument{
+        validateUpdateProductRequest(productRequestDto);
+        Product product = ProductBuilder.convertToProduct(productRequestDto);
+        Product updatedProduct = productService.updateProduct(product);
+        return ResponseEntity.ok(new ProductResponseDto(updatedProduct));
+    }
+    private void validateCreateProductRequest(ProductRequestDto productRequestDto) throws InvalidArgument{
+        if(productRequestDto == null) {
+            throw new InvalidArgument("Product details are required");
+        }
+    }
+    private void validateUpdateProductRequest(ProductRequestDto productRequestDto) throws InvalidArgument, ProductNotFound {
+        if (productRequestDto == null || productRequestDto.getId() == null) {
+            throw new InvalidArgument("Product details and ID are required");
+        }
+    }
+    private void validateDeleteProductRequest(Long id) throws ProductNotFound,InvalidArgument{
+        if(id == null) {
+            throw new InvalidArgument("Product ID is required");
+        }
     }
     @DeleteMapping("/{id}")
-    public String DeleteProduct(@PathVariable int id) {
-        return null;
+    public ResponseEntity<ProductResponseDto> DeleteProduct(@PathVariable Long id) throws ProductNotFound, InvalidArgument {
+        validateDeleteProductRequest(id);
+        Product deletedProduct = productService.deleteProduct(id);
+        return ResponseEntity.ok(new ProductResponseDto(deletedProduct));
     }
     @GetMapping("/category")
     public String getProductsByCategory(@RequestParam String category) {

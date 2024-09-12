@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import scaler.ecommerce.productservice.model.Brand;
 
-public interface BrandRepo extends JpaRepository<Brand, Integer> {
+public interface BrandRepo extends JpaRepository<Brand, Long> {
     @Query("select b from Brand b where b.title = :title")
     Brand findByName(@Param("title") String brand);
 }

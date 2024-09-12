@@ -2,9 +2,11 @@ package scaler.ecommerce.productservice.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 @Getter
 @Setter
@@ -12,10 +14,12 @@ import lombok.Setter;
 public class Product extends BaseModel{
     private String title;
     private String description;
-    private double price;
+    private Double price;
     private String imageURL;
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @JoinColumn(name = "category_id")
     private Category category;
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "brand_id")
+    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private Brand brand;
 }

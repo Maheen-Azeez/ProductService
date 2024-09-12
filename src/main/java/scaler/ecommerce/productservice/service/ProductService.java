@@ -2,6 +2,8 @@ package scaler.ecommerce.productservice.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import scaler.ecommerce.productservice.exception.InvalidArgument;
+import scaler.ecommerce.productservice.exception.ProductNotFound;
 import scaler.ecommerce.productservice.model.Brand;
 import scaler.ecommerce.productservice.model.Category;
 import scaler.ecommerce.productservice.model.Product;
@@ -23,7 +25,7 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public Product getProduct(int id) {
+    public Product getProduct(Long id) {
         return productRepo.findById(id).orElse(null);
     }
 
@@ -83,11 +85,18 @@ public class ProductService implements IProductService{
 
     @Override
     public Product updateProduct(Product product) {
-        return null;
+        if(!productRepo.existsById(product.getId())) {
+            throw new ProductNotFound("No product found with ID: " + product.getId());
+        }
+        return productRepo.save(product);
     }
-
     @Override
-    public Product deleteProduct(int id) {
-        return null;
+    public Product deleteProduct(Long id) {
+        if(!productRepo.existsById(id)){
+            throw new ProductNotFound("No product found with ID: " + id);
+        }
+        Product productToDelete = productRepo.findById(id).orElse(null);
+        productRepo.deleteById(id);
+        return productToDelete;
     }
 }

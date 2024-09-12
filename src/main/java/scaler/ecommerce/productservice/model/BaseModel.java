@@ -13,6 +13,7 @@ public class BaseModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(updatable = false)
     private Date created_at;
     @Temporal(TemporalType.TIMESTAMP)
     private Date updated_at;

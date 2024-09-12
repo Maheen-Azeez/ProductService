@@ -1,6 +1,6 @@
 package scaler.ecommerce.productservice.exception;
 
-public class ProductNotFound extends Exception {
+public class ProductNotFound extends RuntimeException {
     public ProductNotFound() {
     }
 
