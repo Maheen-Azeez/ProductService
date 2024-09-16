@@ -1,6 +1,10 @@
 package scaler.ecommerce.productservice.service;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import scaler.ecommerce.productservice.exception.InvalidArgument;
 import scaler.ecommerce.productservice.exception.ProductNotFound;
@@ -32,6 +36,12 @@ public class ProductService implements IProductService{
     @Override
     public List<Product> getProducts() {
         return productRepo.findAll();
+    }
+
+    @Override
+    public Page<Product> getProducts(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("id").descending());
+        return productRepo.findAll(pageable);
     }
 
     @Override

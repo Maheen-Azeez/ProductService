@@ -1,5 +1,6 @@
 package scaler.ecommerce.productservice.service;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,11 @@ public class FakeStoreService implements IProductService{
     @Override
     public List<Product> getProducts() {
         return List.of();
+    }
+
+    @Override
+    public Page<Product> getProducts(int pageNumber, int pageSize) {
+        return null;
     }
 
     @Override

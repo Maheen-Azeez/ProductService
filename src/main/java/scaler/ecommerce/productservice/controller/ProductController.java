@@ -1,7 +1,7 @@
 package scaler.ecommerce.productservice.controller;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +22,11 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
     private final IProductService productService;
-    public ProductController(@Qualifier("FakeStoreService") IProductService productService) {
+    public ProductController(@Qualifier("ProductService") IProductService productService) {
         this.productService = productService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<ProductResponseDto>> getProducts() throws ProductNotFound {
         List<Product> products = productService.getProducts();
         if (products.isEmpty()) {
@@ -34,6 +34,18 @@ public class ProductController {
         }
         List<ProductResponseDto> productResponse = new ArrayList<>();
         for (Product product : products) {
+            productResponse.add(new ProductResponseDto(product));
+        }
+        return ResponseEntity.ok(productResponse);
+    }
+    @GetMapping("paginated")
+    public ResponseEntity<List<ProductResponseDto>> getPaginatedProducts(@RequestParam int pageNumber,@RequestParam int pageSize) throws ProductNotFound {
+        Page<Product> products = productService.getProducts(pageNumber, pageSize);
+        if (products.getContent().isEmpty()) {
+            throw new ProductNotFound("No products exists");
+        }
+        List<ProductResponseDto> productResponse = new ArrayList<>();
+        for (Product product : products.getContent()) {
             productResponse.add(new ProductResponseDto(product));
         }
         return ResponseEntity.ok(productResponse);
