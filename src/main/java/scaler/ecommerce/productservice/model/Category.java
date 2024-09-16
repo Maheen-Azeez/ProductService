@@ -8,12 +8,13 @@ import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
-public class Category extends BaseModel{
+public class Category extends BaseModel implements Serializable {
     @Column(unique = true)
     private String title;
     @JsonIgnore

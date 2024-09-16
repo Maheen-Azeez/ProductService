@@ -26,11 +26,11 @@ public class ProductAdvice {
         ErrorDto dto = new ErrorDto("",e.getMessage());
         return new ResponseEntity<>(dto, HttpStatus.NOT_ACCEPTABLE);
     }
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorDto> handleNoHandlerFoundException(Exception ex) {
-        ErrorDto errorResponse = new ErrorDto("Not Found", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ErrorDto> handleNoHandlerFoundException(Exception ex) {
+//        ErrorDto errorResponse = new ErrorDto("Not Found", ex.getMessage());
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+//    }
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorDto> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         ErrorDto errorResponse = new ErrorDto("Invalid request body", ex.getMessage());

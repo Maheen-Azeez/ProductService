@@ -4,10 +4,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class ErrorDto {
+public class ErrorDto implements Serializable {
     private String error;
     private String message;
     public ErrorDto(String error, String message) {

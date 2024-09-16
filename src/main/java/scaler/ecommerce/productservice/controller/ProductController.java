@@ -1,5 +1,7 @@
 package scaler.ecommerce.productservice.controller;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,7 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
     private final IProductService productService;
-    public ProductController(IProductService productService) {
+    public ProductController(@Qualifier("FakeStoreService") IProductService productService) {
         this.productService = productService;
     }
 
@@ -37,7 +39,7 @@ public class ProductController {
         return ResponseEntity.ok(productResponse);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponseDto> getProduct(@PathVariable Long id) throws ProductNotFound {
+    public ResponseEntity<ProductResponseDto> getProduct(@PathVariable("id") Long id) throws ProductNotFound {
         Product product = productService.getProduct(id);
         if(product == null) {
             throw new ProductNotFound("No product found with ID: " + id + ". Please check the ID and try again.");

@@ -13,7 +13,7 @@ import scaler.ecommerce.productservice.repository.ProductRepo;
 
 import java.util.List;
 
-@Service
+@Service("ProductService")
 public class ProductService implements IProductService{
     private final ProductRepo productRepo;
     private final CategoryRepo categoryRepo;

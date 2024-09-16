@@ -4,9 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import scaler.ecommerce.productservice.model.Product;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class ProductResponseDto {
+public class ProductResponseDto implements Serializable {
     private Long product_id;
     private String title;
     private String description;
@@ -23,9 +25,13 @@ public class ProductResponseDto {
         this.setImage(product.getImageURL());
         this.category = new CategoryResponseDto();
         this.brand = new BrandResponseDto();
-        this.category.setCategory_id(product.getCategory().getId());
-        this.category.setCategory_name(product.getCategory().getTitle());
-        this.brand.setBrand_id(product.getBrand().getId());
-        this.brand.setBrand_name(product.getBrand().getTitle());
+        if(product.getCategory() != null) {
+            this.category.setCategory_id(product.getCategory().getId());
+            this.category.setCategory_name(product.getCategory().getTitle());
+        }
+        if(product.getBrand() != null) {
+            this.brand.setBrand_id(product.getBrand().getId());
+            this.brand.setBrand_name(product.getBrand().getTitle());
+        }
     }
 }

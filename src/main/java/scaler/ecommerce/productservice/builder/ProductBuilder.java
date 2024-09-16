@@ -4,6 +4,7 @@ import jakarta.annotation.Nullable;
 import lombok.NoArgsConstructor;
 import scaler.ecommerce.productservice.dto.BrandRequestDto;
 import scaler.ecommerce.productservice.dto.CategoryRequestDto;
+import scaler.ecommerce.productservice.dto.FakeStoreProductDto;
 import scaler.ecommerce.productservice.dto.ProductRequestDto;
 import scaler.ecommerce.productservice.model.Brand;
 import scaler.ecommerce.productservice.model.Category;
@@ -49,5 +50,17 @@ public class ProductBuilder {
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid price format: " + price);
         }
+    }
+    public static Product convertToProduct(FakeStoreProductDto dto) {
+        Product product = new Product();
+        Category category = new Category();
+        category.setTitle(dto.getCategory());
+        product.setCategory(category);
+        product.setTitle(dto.getTitle());
+        product.setId(dto.getId());
+        product.setImageURL(dto.getImage());
+        product.setPrice(Double.parseDouble(dto.getPrice()));
+        product.setDescription(dto.getDescription());
+        return product;
     }
 }
